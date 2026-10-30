@@ -65,8 +65,21 @@ def stack_padded_sequences_to_batch(padded_sequences):
     # TODO: stack padded id sequences into a (B, L) torch.long tensor
     return torch.tensor(padded_sequences, dtype=torch.long)
 
-# Step 7 - scale_embeddings_by_sqrt_d_model (not yet solved)
-# TODO: implement
+# Step 7 - scale_embeddings_by_sqrt_d_model
+import math
+import torch
+
+def scale_embeddings_by_sqrt_d_model(embeddings, d_model):
+    """Scale a token embedding tensor by sqrt(d_model)."""
+    """ positional vectors are almost 20x the size of the word vector (if dmodel = 512). If there are 2 sentences -> ['i love cats','I love dogs']
+    Both cats and dogs fall at the same position which is 2. so the positional vector that would be added to both
+    dog and cat is exactly the same. And because the positional vector is much larger , the resultant vector (word+position) is very identical,
+    making it difficult to diffentiate between cat and dog, hence the scaling to make the smaller value bigger
+    
+    Why is the word embedding small in the first place ? Embedding table is learnable, it starts out at random values
+    and gets better during training. The small random values are deliberately kept small - spread ≈ 1/√d_model """
+
+    return embeddings*math.sqrt(d_model)
 
 # Step 8 - compute_positional_div_term (not yet solved)
 # TODO: implement
